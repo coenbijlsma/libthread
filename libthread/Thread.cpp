@@ -26,7 +26,7 @@ using std::endl;
 
 libthread::Thread::Thread() throw(){
     _target = (void*)this;
-    _state = Thread::STATE_INACTIVE;
+    _state = Thread::STATE_UNINITIALIZED;
 }
 
 libthread::Thread::Thread(Runnable* target) throw(ThreadException){
@@ -34,7 +34,7 @@ libthread::Thread::Thread(Runnable* target) throw(ThreadException){
         throw ThreadException("The target cannot be NULL");
     }
     _target = (void*)target;
-    _state = Thread::STATE_INACTIVE;
+    _state = Thread::STATE_UNINITIALIZED;
 }
 
 libthread::Thread::~Thread() throw(){
@@ -42,6 +42,7 @@ libthread::Thread::~Thread() throw(){
 
         switch(pthread_kill(_thread, SIGKILL) ){
             case 0:
+                _state = Thread::STATE_KILLED;
                 break;
             case ESRCH:
                 cerr << "Could not kill thread: Thread not found." << endl;
@@ -74,6 +75,9 @@ void libthread::Thread::_init() throw(ThreadException){
 }
 
 void libthread::Thread::join() throw(ThreadException){
+    if( _state == Thread::STATE_UNINITIALIZED ){
+        throw ThreadException("Cannot join uninitialized thread, call Thread::start() first.");
+    }
     switch(pthread_join(_thread, NULL)){
         case 0:
             return;
@@ -89,6 +93,9 @@ void libthread::Thread::join() throw(ThreadException){
 }
 
 void libthread::Thread::detach() throw(ThreadException){
+    if( _state == Thread::STATE_UNINITIALIZED ){
+        throw ThreadException("Cannot detach uninitialized thread, call Thread::start() first.");
+    }
     switch(pthread_detach(_thread)){
         case 0:
             return;

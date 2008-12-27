@@ -29,7 +29,7 @@ namespace libthread {
     class Thread : public Runnable {
 
     public:
-        enum state_t {STATE_INACTIVE, STATE_RUNNING, STATE_KILLED};
+        enum state_t {STATE_UNINITIALIZED, STATE_INACTIVE, STATE_RUNNING, STATE_KILLED};
         
         Thread() throw();
         Thread(Runnable* target) throw(ThreadException);
