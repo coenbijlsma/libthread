@@ -104,7 +104,7 @@ void libthread::Thread::detach() throw(ThreadException){
         case ESRCH:
             throw ThreadException("Could not detach thread: Thread not found.");
         default:
-            throw ThreadException("Unknown error while joining thread");
+            throw ThreadException("Unknown error while detaching thread");
     }
 }
 

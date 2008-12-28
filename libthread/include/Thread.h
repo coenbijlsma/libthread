@@ -14,8 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with Sentry.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef THREAD_H
-#define	THREAD_H
+#ifndef CPPTHREAD_H // to avoid #define collisions
+#define	CPPTHREAD_H
 
 #include "Runnable.h"
 #include "ThreadException.h"
@@ -58,5 +58,5 @@ namespace libthread {
 typedef libthread::Thread* create_thread_t(libthread::Runnable* target);
 typedef bool destroy_thread_t(libthread::Thread* thread);
 
-#endif	/* THREAD_H */
+#endif	/* CPPTHREAD_H */
 

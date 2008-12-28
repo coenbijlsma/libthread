@@ -3,7 +3,7 @@ all:
 		Thread.cpp
 		g++ -g3 -I./include/ -fPIC -g -c -Wall \
 		ThreadException.cpp
-		g++ -g3 -shared -Wl,-soname,libthread.so.1 -o ./libthread.so.1.0.0 \
+		g++ -g3 -shared -Wl,-soname,libthread.so -o ./libthread.so.1.0.0 \
 		Thread.o ThreadException.o -lc -lpthread
 
 clean:
@@ -13,13 +13,19 @@ clean:
 		@if [ -f test ]; then rm test; fi
 
 install: isroot all
-		cp ./libthread.so.1.0.0 /usr/lib/
-		ldconfig -v
+		@cp -v ./libthread.so.1.0.0 /usr/lib/
+		ldconfig
+		@cp -v ./include/Thread.h /usr/include
+		@cp -v ./include/ThreadException.h /usr/include
+		@cp -v ./include/Runnable.h /usr/include
 
 uninstall: isroot
 		@if [ -f /usr/lib/libthread.so.1.0.0 ]; then \
 			rm /usr/lib/libthread.so.1.0.0; \
-			ldconfig -v; \
+			ldconfig; \
+			rm /usr/include/Runnable.h; \
+			rm /usr/include/ThreadException.h; \
+			rm /usr/include/Thread.h; \
 		fi
 
 test:
